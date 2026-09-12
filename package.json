@@ -1,0 +1,29 @@
+{
+  "name": "divar",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon node main.js",
+    "dev": "node main.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "auto-bind": "^3.0.0",
+    "colors": "^1.4.0",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "http-errors": "^2.0.1",
+    "http-server": "^14.1.1",
+    "http-status": "^2.1.0",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.9.1",
+    "slugify": "^1.6.9",
+    "swagger-jsdoc": "^6.3.0",
+    "swagger-ui": "^5.32.12",
+    "swagger-ui-express": "^5.0.1"
+  }
+}
