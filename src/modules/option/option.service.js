@@ -30,6 +30,7 @@ class optionService {
       replacement: "_",
       lower: true,
     });
+
     await this.AllredycheckExisBykey(optionDto.key, category._id);
     if (optionDto?.list && typeof optionDto.list === "string") {
       optionDto.list = optionDto.list.split(",");
@@ -86,3 +87,8 @@ class optionService {
 }
 
 module.exports = new optionService();
+
+const user = 10;
+const admin = 2;
+const jafar = user + admin;
+console.log(jafar);
