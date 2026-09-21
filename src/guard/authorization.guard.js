@@ -9,7 +9,6 @@ const Authorization = async (req, res, next) => {
     if (!token)
       throw new createHttpError.Unauthorized(AuthorizationMessage.Login);
     const data = jwt.verify(token, process.env.JWT_SECRET_KAY);
-    console.log(data);
     if (typeof data === "object" && "id" in data) {
       const user = await UserModel.findById(data?.id, {
         accessTocken: 0,

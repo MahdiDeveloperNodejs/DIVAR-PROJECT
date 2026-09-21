@@ -9,7 +9,7 @@
 // }
 // module.exports = AllExpansionHandller;
 
-function AllExpansionHandller(app) {
+function AllExpansionHandler(app) {
   app.use((err, req, res, next) => {
     console.error(err); // این خط رو اضافه کنید
     let status = err?.status ?? err?.statusCode ?? err?.code;
@@ -19,4 +19,4 @@ function AllExpansionHandller(app) {
     });
   });
 }
-module.exports = AllExpansionHandller;
+module.exports = AllExpansionHandler;
