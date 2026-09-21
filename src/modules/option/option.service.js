@@ -3,15 +3,16 @@ const { default: slugify } = require("slugify");
 const { optionMessages } = require("./option.message");
 const OptionModel = require("./option.model");
 const autoBind = require("auto-bind");
-const CategoryModel = require("../category/category.model");
+const categoryService = require("../category/category.service");
+const { isTrue, isFalse } = require("../../common/utils/function");
 
 class optionService {
   #model;
-  #categoryModel;
+  #categoryService;
   constructor() {
     autoBind(this);
     this.#model = OptionModel;
-    this.#categoryModel = CategoryModel;
+    this.#categoryService = categoryService;
   }
   async find() {
     const options = await this.#model
@@ -20,7 +21,9 @@ class optionService {
     return options;
   }
   async create(optionDto) {
-    const category = await this.checkExisById(optionDto.category);
+    const category = await this.#categoryService.checkExisById(
+      optionDto.category,
+    );
     optionDto.category = category._id;
     optionDto.key = slugify(optionDto.key, {
       trim: true,
@@ -31,6 +34,9 @@ class optionService {
     if (optionDto?.list && typeof optionDto.list === "string") {
       optionDto.list = optionDto.list.split(",");
     } else if (Array.isArray(optionDto.list)) optionDto.list = [];
+    if (isTrue(optionDto?.required)) optionDto.required = true;
+    if (isFalse(optionDto?.required)) optionDto.required = false;
+
     const option = await this.#model.create(optionDto);
     return option;
   }
@@ -57,13 +63,17 @@ class optionService {
   async findById(id) {
     return await this.checkExisById(id);
   }
+  async removeById(id) {
+    const option = await this.checkExisById(id);
+    return await this.#model.deleteOne(option._id);
+  }
   async checkExisById(id) {
-    const category = await this.#categoryModel.findById(id);
-    if (!category) throw new createHttpError.NotFound(optionMessages.NotFound);
-    return category;
+    const option = await this.#model.findById(id);
+    if (!option) throw new createHttpError.NotFound(optionMessages.NotFound);
+    return option;
   }
   async AllredycheckExisBykey(key, category) {
-    const exSest = await this.#categoryModel.findOne({ key, category });
+    const exSest = await this.#model.findOne({ key, category });
     if (exSest)
       throw new createHttpError.Conflict(optionMessages.AllredyExiset);
     return exSest;

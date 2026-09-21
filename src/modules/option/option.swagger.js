@@ -119,3 +119,20 @@
  *              description:  successfully
  *
  */
+/**
+ * @swagger
+ * /option/{id}:
+ *  delete:
+ *      summary: delete option by id
+ *      tags:
+ *          -   option
+ *      parameters:
+ *          -   in: path
+ *              name: id
+ *              type: string
+ *      responses:
+ *          200:
+ *              description:  successfully
+ *          404:
+ *              description:  option not found      
+ */

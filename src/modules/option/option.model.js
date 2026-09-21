@@ -6,6 +6,7 @@ const OptionSchema = new mongoose.Schema({
   type: { type: String, enum: ["number", "string", "array", "boolean"] },
   enum: { type: Array, default: [] },
   guid: { type: String, default: false },
+  required: { type: String, required: true, default: false },
   category: { type: Types.ObjectId, ref: "Category", required: true },
 });
 

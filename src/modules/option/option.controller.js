@@ -11,7 +11,15 @@ class optionController {
   }
   async create(req, res, next) {
     try {
-      const { title, key, type, enum: list, guid, category } = req.body;
+      const {
+        title,
+        key,
+        type,
+        enum: list,
+        guid,
+        category,
+        required,
+      } = req.body;
       await this.#service.create({
         title,
         key,
@@ -19,6 +27,7 @@ class optionController {
         enum: list,
         guid,
         category,
+        required,
       });
       return res.status(status.CREATED).json({
         messgas: optionMessages.create,
@@ -58,6 +67,15 @@ class optionController {
       const { id } = req.params;
       const userId = await this.#service.findById(id);
       return res.status(status.CREATED).json(userId);
+    } catch (error) {
+      next(error);
+    }
+  }
+  async removeById(req, res, next) {
+    try {
+      const { id } = req.params;
+      await this.#service.removeById(id);
+      return res.status(status.OK).json({ message: optionMessages.Delete });
     } catch (error) {
       next(error);
     }
