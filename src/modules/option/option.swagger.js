@@ -36,6 +36,28 @@
  *                      type: array
  *                      items:
  *                          type: string
+ *          updatedOption:
+ *              type: object
+ *              properties:
+ *                  title:
+ *                      type: string
+ *                  key:
+ *                      type: string
+ *                  category:
+ *                      type: string
+ *                  guid:
+ *                      type: string
+ *                  type:
+ *                      type: string
+ *                      enum:
+ *                          -   number
+ *                          -   string
+ *                          -   array
+ *                          -   boolean
+ *                  enum:
+ *                      type: array
+ *                      items:
+ *                          type: string
  */
 
 /**
@@ -53,6 +75,26 @@
  *              application/json:
  *                  schema:
  *                      $ref: '#/components/schemas/CreateOption'
+ *      responses:
+ *        201:
+ *          description: successfully
+ */
+
+/**
+ * @swagger
+ * /option/{id}:
+ *   put:
+ *      summary: updated new id
+ *      tags:
+ *          -   option
+ *      requestBody:
+ *          content:
+ *              application/x-www-form-urlencoded:
+ *                  schema:
+ *                      $ref: '#/components/schemas/updatedOption'
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/schemas/updatedOption'
  *      responses:
  *        201:
  *          description: successfully

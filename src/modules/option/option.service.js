@@ -5,6 +5,7 @@ const OptionModel = require("./option.model");
 const autoBind = require("auto-bind");
 const categoryService = require("../category/category.service");
 const { isTrue, isFalse } = require("../../common/utils/function");
+const { default: mongoose } = require("mongoose");
 
 class optionService {
   #model;
@@ -34,7 +35,7 @@ class optionService {
     await this.AllredycheckExisBykey(optionDto.key, category._id);
     if (optionDto?.list && typeof optionDto.list === "string") {
       optionDto.list = optionDto.list.split(",");
-    } else if (Array.isArray(optionDto.list)) optionDto.list = [];
+    } else if (!Array.isArray(optionDto.list)) optionDto.list = [];
     if (isTrue(optionDto?.required)) optionDto.required = true;
     if (isFalse(optionDto?.required)) optionDto.required = false;
 
@@ -84,11 +85,35 @@ class optionService {
     if (!category) throw new createHttpError.NotFound(optionMessages.NotFound);
     return category;
   }
+  async update(id, optionDto) {
+    const exist = await this.checkExisById(id);
+    if (optionDto?.category && mongoose.isValidObjectId(optionDto?.category)) {
+      const category = await this.#categoryService.checkExisById(
+        optionDto.category,
+      );
+      optionDto.category = category._id;
+    } else {
+      delete optionDto.category;
+    }
+    if (optionDto.slug) {
+      optionDto.key = slugify(optionDto.key, {
+        trim: true,
+        replacement: "_",
+        lower: true,
+      });
+      let categoryId = exist.category;
+      if (optionDto.category) categoryId = optionDto.category;
+      await this.AllredycheckExisBykey(optionDto.key, categoryId);
+    }
+
+    if (optionDto?.list && typeof optionDto.list === "string") {
+      optionDto.list = optionDto.list.split(",");
+    } else if (Array.isArray(optionDto.list)) delete optionDto.list;
+    if (isTrue(optionDto?.required)) optionDto.required = true;
+    else if (isFalse(optionDto?.required)) optionDto.required = false;
+    else delete optionDto.required
+    return await this.#model.updateOne({ _id: id }, { $set: optionDto });
+  }
 }
 
 module.exports = new optionService();
-
-const user = 10;
-const admin = 2;
-const jafar = user + admin;
-console.log(jafar);

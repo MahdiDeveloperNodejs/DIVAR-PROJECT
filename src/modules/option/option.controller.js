@@ -80,6 +80,34 @@ class optionController {
       next(error);
     }
   }
+  async update(req, res, next) {
+    try {
+      const {
+        title,
+        key,
+        type,
+        enum: list,
+        guid,
+        category,
+        required,
+      } = req.body;
+      const { id } = req.params;
+      await this.#service.update(id, {
+        title,
+        key,
+        type,
+        enum: list,
+        guid,
+        category,
+        required,
+      });
+      return res.status(status.CREATED).json({
+        message: optionMessages.updated,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 module.exports = new optionController();
