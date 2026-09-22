@@ -5,12 +5,15 @@ const { default: slugify } = require("slugify");
 const createHttpError = require("http-errors");
 const { categoryMessages } = require("./category.message");
 const { isValidObjectId, Types } = require("mongoose");
+const OptionModel = require("../option/option.model");
 
 class CategoryService {
+  #optionModel;
   #model;
   constructor() {
     autoBind(this);
     this.#model = CategoryModel;
+    this.#optionModel = OptionModel;
   }
   async create(categoryDto) {
     if (categoryDto?.parent && isValidObjectId(categoryDto.parent)) {
@@ -37,8 +40,6 @@ class CategoryService {
   async find() {
     return await this.#model.find({ parent: { $exists: false } });
   }
-
-  ////////////////////////////////////////////////////////////////
   async checkExisById(id) {
     const category = await this.#model.findById(id);
     if (!category)
@@ -56,6 +57,13 @@ class CategoryService {
     if (category)
       throw new createHttpError.Conflict(categoryMessages.AllredyExiset);
     return null;
+  }
+  async remove(id) {
+    await this.checkExisById(id);
+    await this.#optionModel.deleteMany({ category: id }).then(async () => {
+      return await this.#model.deleteOne({ _id: id });
+    });
+    return true;
   }
 }
 

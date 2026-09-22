@@ -55,3 +55,17 @@
  *              description:  successfully
  *
  */
+/**
+ * @swagger
+ * /category/{id}:
+ *   delete:
+ *      summary: delete a category
+ *      tags:
+ *          -   Category
+ *      parameters:
+ *          -   in: path
+ *              name: id
+ *      responses:
+ *        201:
+ *          description: successfully
+ */
