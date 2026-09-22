@@ -81,7 +81,7 @@ class optionService {
     return exSest;
   }
   async checkExisByCategoryID(id) {
-    const category = await this.#model.findById(id);
+    const category = await this.#categoryService.checkExisById(id);
     if (!category) throw new createHttpError.NotFound(optionMessages.NotFound);
     return category;
   }
@@ -111,7 +111,7 @@ class optionService {
     } else if (Array.isArray(optionDto.list)) delete optionDto.list;
     if (isTrue(optionDto?.required)) optionDto.required = true;
     else if (isFalse(optionDto?.required)) optionDto.required = false;
-    else delete optionDto.required
+    else delete optionDto.re;
     return await this.#model.updateOne({ _id: id }, { $set: optionDto });
   }
 }

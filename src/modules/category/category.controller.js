@@ -19,7 +19,6 @@ class CategoryController {
     } catch (error) {
       next(error);
     }
-    
   }
   async find(req, res, next) {
     try {
@@ -29,7 +28,7 @@ class CategoryController {
       next(error);
     }
   }
-    async remove(req, res, next) {
+  async remove(req, res, next) {
     try {
       const { id } = req.params;
       await this.#service.remove(id);
