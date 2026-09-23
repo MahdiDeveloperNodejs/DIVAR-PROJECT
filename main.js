@@ -5,6 +5,7 @@ const mainRouter = require("./src/app.routes");
 const cookieParser = require("cookie-parser");
 const NotFoundHandler = require("./src/common/expansion/nutFund-handller");
 const AllExpansionHandler = require("./src/common/expansion/all-expansion.handller");
+const expressEjsLayouts = require("express-ejs-layouts");
 require("dotenv").config();
 
 async function main() {
@@ -13,7 +14,11 @@ async function main() {
   require("./src/config/mongodb.config");
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
-  app.use(cookieParser(process.env.COOKIE_SECRET_KAY))
+  app.use(cookieParser(process.env.COOKIE_SECRET_KAY));
+  app.use(express.static("public"));
+  app.use(expressEjsLayouts);
+  app.set("view engine", "ejs");
+  app.set("layout", "./layouts/panel/main.ejs");
   app.use(mainRouter);
   swaggerConfig(app);
   NotFoundHandler(app);
